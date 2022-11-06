@@ -1,2 +1,2 @@
 # mini-projects
-### these are my mini projects created for different applications, programs or games
+### these are my open source mini-projects created for various applications, programs or games
