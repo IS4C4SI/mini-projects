@@ -4,8 +4,8 @@
 	"author": "Nepgearsy и SIKI",
 	"version": "2",
 	"blt_version" : 2,
-    "image" : "steam-image.png",
-    "color" : "10 10 10",
+	"image" : "steam-image.png",
+	"color" : "10 10 10",
 	"hooks": [
 		{
 			"hook_id": "lib/managers/menu/contractboxgui",
