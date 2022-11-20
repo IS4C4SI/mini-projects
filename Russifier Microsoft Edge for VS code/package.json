@@ -1,0 +1,726 @@
+{
+	"name": "vscode-edge-devtools",
+	"displayName": "Microsoft Edge Tools for VS Code",
+	"description": "Используйте инструменты Microsoft Edge из VS Code, чтобы просмотреть структуру HTML вашего сайта во время выполнения, изменить его макет, устранить проблемы со стилем, а также просмотреть сетевые запросы вашего сайта.",
+	"version": "2.1.1",
+	"license": "SEE LICENSE IN LICENSE",
+	"publisher": "ms-edgedevtools",
+	"preview": false,
+	"icon": "icon.png",
+	"extensionKind": [
+		"ui"
+	],
+	"author": {
+		"name": "Microsoft Corporation"
+	},
+	"homepage": "https://github.com/Microsoft/vscode-edge-devtools/blob/main/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-edge-devtools"
+	},
+	"keywords": [
+		"browser",
+		"elements",
+		"network",
+		"devtools",
+		"styling",
+		"css",
+		"dom"
+	],
+	"engines": {
+		"node": ">=8.0.0",
+		"vscode": "^1.48.0"
+	},
+	"categories": [
+		"Debuggers"
+	],
+	"aiKey": "AIF-d9b70cd4-b9f9-4d70-929b-a071c400b217",
+	"main": "./out/extension",
+	"activationEvents": [
+		"onStartupFinished",
+		"onLanguage:css",
+		"onLanguage:html",
+		"onLanguage:javascript",
+		"onLanguage:javascriptreact",
+		"onLanguage:json",
+		"onLanguage:jsonc",
+		"onLanguage:less",
+		"onLanguage:sass",
+		"onLanguage:scss",
+		"onLanguage:typescript",
+		"onLanguage:typescriptreact"
+	],
+	"capabilities": {
+		"untrustedWorkspaces": {
+			"supported": "limited",
+			"description": "Доверие рабочей области необходимо для настройки и отладки проектов"
+		},
+		"virtualWorkspaces": false
+	},
+	"contributes": {
+		"commands": [
+			{
+				"command": "vscode-edge-devtools.attach",
+				"title": "Прикрепиться к цели",
+				"category": "Microsoft Edge Tools"
+			},
+			{
+				"command": "vscode-edge-devtools.launch",
+				"title": "Запустите Edge, а затем прикрепите к цели",
+				"category": "Microsoft Edge Tools"
+			},
+			{
+				"command": "vscode-edge-devtools-view.launch",
+				"category": "Microsoft Edge Tools",
+				"title": "Открыть новую вкладку",
+				"enablement": "titleCommandsRegistered",
+				"icon": {
+					"light": "resources/light/launch.svg",
+					"dark": "resources/dark/launch.svg"
+				}
+			},
+			{
+				"command": "vscode-edge-devtools-view.refresh",
+				"category": "Microsoft Edge Tools",
+				"title": "Обновить",
+				"enablement": "titleCommandsRegistered",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "vscode-edge-devtools-view.attach",
+				"category": "Microsoft Edge Tools",
+				"title": "Подключите и откройте Microsoft Edge Tools",
+				"enablement": "viewItem != cdpTargetClosing",
+				"icon": {
+					"light": "resources/light/attach.svg",
+					"dark": "resources/dark/attach.svg"
+				}
+			},
+			{
+				"command": "vscode-edge-devtools-view.close-instance",
+				"category": "Microsoft Edge Tools",
+				"title": "Закрыть экземпляр",
+				"enablement": "viewItem != cdpTargetClosing",
+				"icon": {
+					"light": "resources/light/close_browser_page.svg",
+					"dark": "resources/dark/close_browser_page.svg"
+				}
+			},
+			{
+				"command": "vscode-edge-devtools-view.toggleScreencast",
+				"category": "Microsoft Edge Tools",
+				"title": "Переключение скринкаста",
+				"enablement": "viewItem != cdpTargetClosing",
+				"icon": {
+					"light": "resources/light/screencast.svg",
+					"dark": "resources/dark/screencast.svg"
+				}
+			},
+			{
+				"command": "vscode-edge-devtools-view.copyItem",
+				"category": "Microsoft Edge Tools",
+				"title": "Копировать значение"
+			},
+			{
+				"command": "vscode-edge-devtools-view.openSettings",
+				"category": "Microsoft Edge Tools",
+				"title": "Открыть настройки"
+			},
+			{
+				"command": "vscode-edge-devtools-view.viewChangelog",
+				"category": "Microsoft Edge Tools",
+				"title": "Просмотреть список изменений"
+			},
+			{
+				"command": "vscode-edge-devtools-view.viewDocumentation",
+				"category": "Microsoft Edge Tools",
+				"title": "Просмотр документации"
+			},
+			{
+				"command": "vscode-edge-devtools-view.configureLaunchJson",
+				"category": "Microsoft Edge Tools",
+				"enablement": "titleCommandsRegistered && isWorkspaceTrusted",
+				"title": "Настройка файла launch.json"
+			},
+			{
+				"command": "vscode-edge-devtools-view.launchProject",
+				"category": "Microsoft Edge Tools",
+				"enablement": "titleCommandsRegistered && isWorkspaceTrusted",
+				"title": "Запуск проекта"
+			},
+			{
+				"command": "vscode-edge-devtools-view.cssMirrorContent",
+				"category": "Microsoft Edge Tools",
+				"enablement": "titleCommandsRegistered",
+				"title": "Включение/выключение зеркального редактирования CSS"
+			},
+			{
+				"command": "vscode-edge-devtools-view.launchHtml",
+				"title": "Открыть браузер с DevTools",
+				"category": "Microsoft Edge Tools"
+			},
+			{
+				"command": "vscode-edge-devtools-view.launchScreencast",
+				"title": "Открыть браузер",
+				"category": "Microsoft Edge Tools"
+			}
+		],
+		"configuration": {
+			"title": "Microsoft Edge Tools",
+			"type": "object",
+			"properties": {
+				"vscode-edge-devtools.hostname": {
+					"type": "string",
+					"default": "localhost",
+					"description": "Имя хоста, на котором выполняется поиск удаленных отладочных экземпляров"
+				},
+				"vscode-edge-devtools.port": {
+					"type": "number",
+					"default": 9222,
+					"description": "Порт, на котором выполняется поиск удаленных отладочных экземпляров"
+				},
+				"vscode-edge-devtools.useHttps": {
+					"type": "boolean",
+					"default": false,
+					"description": "Должны ли мы запрашивать список удаленных целей, используя https, а не http"
+				},
+				"vscode-edge-devtools.defaultUrl": {
+					"type": "string",
+					"default": "",
+					"description": "URL-адрес по умолчанию, который открывается при запуске браузера без цели"
+				},
+				"vscode-edge-devtools.defaultEntrypoint": {
+					"type": "string",
+					"default": "index.html",
+					"description": "Точка входа по умолчанию на вашу веб-страницу. Используется для разрешения URL-адресов отладки без имени пути"
+				},
+				"vscode-edge-devtools.userDataDir": {
+					"type": [
+						"string",
+						"boolean"
+					],
+					"default": true,
+					"description": "По умолчанию Microsoft Edge запускается с отдельным профилем пользователя во временной папке. Используйте этот параметр, чтобы переопределить путь. Вы также можете установить значение false для запуска с вашим профилем пользователя по умолчанию."
+				},
+				"vscode-edge-devtools.webRoot": {
+					"type": "string",
+					"description": "Абсолютный путь к корню веб-сервера. Используется для разрешения путей типа `/app.js ` к файлам на диске",
+					"default": "${workspaceFolder}"
+				},
+				"vscode-edge-devtools.pathMapping": {
+					"type": "object",
+					"default": {
+						"/": "${workspaceFolder}"
+					},
+					"description": "Набор сопоставлений для перезаписи местоположений исходных файлов из того, что указано в исходной карте, в их местоположения на диске"
+				},
+				"vscode-edge-devtools.sourceMapPathOverrides": {
+					"type": "object",
+					"description": "Набор сопоставлений для переопределения расположения исходных файлов карт.",
+					"default": {
+						"webpack:///./*": "${webRoot}/*",
+						"webpack:///src/*": "${webRoot}/*",
+						"webpack:///*": "*",
+						"webpack:///./~/*": "${webRoot}/node_modules/*",
+						"webpack://*": "${webRoot}/*",
+						"meteor://💻app/*": "${webRoot}/*"
+					}
+				},
+				"vscode-edge-devtools.sourceMaps": {
+					"type": "boolean",
+					"description": "Используйте исходные карты JavaScript (если они существуют)",
+					"default": true
+				},
+				"vscode-edge-devtools.showWorkers": {
+					"type": "boolean",
+					"description": "Показать службу и общих работников в целевом списке.",
+					"default": false
+				},
+				"vscode-edge-devtools.headless": {
+					"type": "boolean",
+					"description": "Запустите Microsoft Edge в безголовом режиме. (требуется перезапуск кода Visual Studio)",
+					"default": true
+				},
+				"vscode-edge-devtools.browserArgs": {
+					"type": "array",
+					"description": "Запустите Microsoft Edge с указанными аргументами. (требуется перезапуск кода Visual Studio)",
+					"items": {
+						"type": "string"
+					},
+					"default": []
+				},
+				"vscode-edge-devtools.timeout": {
+					"type": "number",
+					"description": "Количество миллисекунд, в течение которых инструменты Microsoft Edge будут пытаться подключить браузер до истечения времени ожидания",
+					"default": 10000
+				},
+				"vscode-edge-devtools.browserFlavor": {
+					"type": "string",
+					"enum": [
+						"Default",
+						"Stable",
+						"Beta",
+						"Dev",
+						"Canary"
+					],
+					"enumDescriptions": [
+						"Microsoft Edge Tools для VS Code попытается открыть версии Microsoft Edge в следующем порядке: Stable, Beta, Dev and Canary",
+						"Microsoft Edge Tools для VS Code будет использовать стабильную версию Microsoft Edge",
+						"Microsoft Edge Tools для VS Code будет использовать бета-версию Microsoft Edge",
+						"Microsoft Edge Tools для VS Code будет использовать версию Microsoft Edge Dev",
+						"Microsoft Edge Tools для VS Code будет использовать версию Microsoft Edge Canary"
+					]
+				},
+				"vscode-edge-devtools.webhint": {
+					"type": "boolean",
+					"default": true,
+					"description": "Включите обратную связь с исходными файлами web hinton для улучшения доступности, совместимости, безопасности и многого другого."
+				}
+			}
+		},
+		"debuggers": [
+			{
+				"type": "vscode-edge-devtools.debug",
+				"label": "Microsoft Edge Tools",
+				"configurationSnippets": [
+					{
+						"label": "Microsoft Edge Tools: Launch",
+						"description": "Запустите Microsoft Edge по URL-адресу",
+						"body": {
+							"type": "vscode-edge-devtools.debug",
+							"request": "launch",
+							"name": "Launch Microsoft Edge and open the Edge DevTools",
+							"url": "http://localhost:8080",
+							"webRoot": "^\"${2:\\${workspaceFolder\\}}\""
+						}
+					},
+					{
+						"label": "Microsoft Edge Tools: Attach",
+						"description": "Подключиться к экземпляру Microsoft Edge, уже находящемуся в режиме отладки",
+						"body": {
+							"type": "vscode-edge-devtools.debug",
+							"request": "attach",
+							"name": "Attach to Microsoft Edge and open the Edge DevTools",
+							"url": "http://localhost:8080",
+							"webRoot": "^\"${2:\\${workspaceFolder\\}}\""
+						}
+					}
+				],
+				"configurationAttributes": {
+					"launch": {
+						"properties": {
+							"url": {
+								"type": "string",
+								"description": "Абсолютный uri для запуска",
+								"default": "http://localhost:8080"
+							},
+							"file": {
+								"type": "string",
+								"description": "Путь к файлу для запуска",
+								"default": "${workspaceFolder}/index.html"
+							},
+							"hostname": {
+								"type": "string",
+								"default": "localhost",
+								"description": "Имя хоста, на котором выполняется поиск удаленных отладочных экземпляров"
+							},
+							"port": {
+								"type": "number",
+								"default": 9222,
+								"description": "Порт, на котором выполняется поиск удаленных отладочных экземпляров"
+							},
+							"userDataDir": {
+								"type": [
+									"string",
+									"boolean"
+								],
+								"description": "По умолчанию Microsoft Edge запускается с отдельным профилем пользователя во временной папке. Используйте этот параметр, чтобы переопределить путь. Вы также можете установить значение false для запуска с вашим профилем пользователя по умолчанию вместо этого.",
+								"default": true
+							},
+							"useHttps": {
+								"type": "boolean",
+								"default": false,
+								"description": "Должны ли мы запрашивать список удаленных целей, используя https, а не http"
+							},
+							"webRoot": {
+								"type": "string",
+								"description": "Абсолютный путь к корню веб-сервера. Используется для разрешения пути, подобного `/app.js ` к файлам на диске",
+								"default": "${workspaceFolder}"
+							},
+							"pathMapping": {
+								"type": "object",
+								"description": "Сопоставление URL-адресов /путей к локальным папкам для преобразования сценариев в Microsoft Edge в сценарии на диске",
+								"default": {
+									"/": "${workspaceFolder}"
+								}
+							},
+							"sourceMapPathOverrides": {
+								"type": "object",
+								"description": "Набор сопоставлений для перезаписи местоположений исходных файлов из того, что указано в исходной карте, в их местоположения на диске",
+								"default": {
+									"webpack:///./*": "${webRoot}/*",
+									"webpack:///src/*": "${webRoot}/*",
+									"webpack:///*": "*",
+									"webpack:///./~/*": "${webRoot}/node_modules/*",
+									"webpack://*": "${webRoot}/*",
+									"meteor://💻app/*": "${webRoot}/*"
+								}
+							},
+							"sourceMaps": {
+								"type": "boolean",
+								"description": "Используйте исходные карты JavaScript (если они существуют)",
+								"default": true
+							},
+							"vscode-edge-devtools.browserFlavor": {
+								"type": "string",
+								"enum": [
+									"Default",
+									"Stable",
+									"Beta",
+									"Dev",
+									"Canary"
+								],
+								"enumDescriptions": [
+									"Microsoft Edge Tools for VS Code will try to open the Microsoft Edge flavors in the following order: Stable, Beta, Dev and Canary",
+									"Microsoft Edge Tools for VS Code will use Microsoft Edge Stable version",
+									"Microsoft Edge Tools for VS Code will use Microsoft Edge Beta version",
+									"Microsoft Edge Tools for VS Code will use Microsoft Edge Dev version",
+									"Microsoft Edge Tools for VS Code will use Microsoft Edge Canary version"
+								]
+							}
+						}
+					},
+					"attach": {
+						"properties": {
+							"url": {
+								"type": "string",
+								"description": "Абсолютный uri для запуска.",
+								"default": "http://localhost:8080"
+							},
+							"file": {
+								"type": "string",
+								"description": "Путь к файлу для запуска.",
+								"default": "${workspaceFolder}/index.html"
+							},
+							"hostname": {
+								"type": "string",
+								"default": "localhost",
+								"description": "Имя хоста, на котором выполняется поиск удаленных отладочных экземпляров"
+							},
+							"port": {
+								"type": "number",
+								"default": 9222,
+								"description": "Порт, на котором выполняется поиск удаленных отладочных экземпляров"
+							},
+							"userDataDir": {
+								"type": [
+									"string",
+									"boolean"
+								],
+								"description": "По умолчанию Microsoft Edge запускается с отдельным профилем пользователя во временной папке. Используйте этот параметр, чтобы переопределить путь. Вы также можете установить значение false для запуска с вашим профилем пользователя по умолчанию.",
+								"default": true
+							},
+							"useHttps": {
+								"type": "boolean",
+								"default": false,
+								"description": "Должны ли мы запрашивать список удаленных целей, используя https, а не http"
+							},
+							"webRoot": {
+								"type": "string",
+								"description": "Абсолютный путь к корню веб-сервера. Используется для разрешения путей типа `/app.js ` к файлам на диске",
+								"default": "${workspaceFolder}"
+							},
+							"pathMapping": {
+								"type": "object",
+								"description": "Сопоставление URL-адресов /путей к локальным папкам для преобразования сценариев в Microsoft Edge в сценарии на диске",
+								"default": {
+									"/": "${workspaceFolder}"
+								}
+							},
+							"sourceMapPathOverrides": {
+								"type": "object",
+								"description": "Набор сопоставлений для перезаписи местоположений исходных файлов из того, что указано в исходной карте, в их местоположения на диске",
+								"default": {
+									"webpack:///./*": "${webRoot}/*",
+									"webpack:///src/*": "${webRoot}/*",
+									"webpack:///*": "*",
+									"webpack:///./~/*": "${webRoot}/node_modules/*",
+									"webpack://*": "${webRoot}/*",
+									"meteor://💻app/*": "${webRoot}/*"
+								}
+							},
+							"sourceMaps": {
+								"type": "boolean",
+								"description": "Используйте исходные карты JavaScript (если они существуют)",
+								"default": true
+							},
+							"vscode-edge-devtools.browserFlavor": {
+								"type": "string",
+								"enum": [
+									"Default",
+									"Stable",
+									"Beta",
+									"Dev",
+									"Canary"
+								],
+								"enumDescriptions": [
+									"Microsoft Edge Tools for VS Code will try to open the Microsoft Edge flavors in the following order: Stable, Beta, Dev and Canary",
+									"Microsoft Edge Tools for VS Code will use Microsoft Edge Stable version",
+									"Microsoft Edge Tools for VS Code will use Microsoft Edge Beta version",
+									"Microsoft Edge Tools for VS Code will use Microsoft Edge Dev version",
+									"Microsoft Edge Tools for VS Code will use Microsoft Edge Canary version"
+								]
+							}
+						}
+					}
+				}
+			}
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "vscode-edge-devtools-view.attach",
+					"when": "view == vscode-edge-devtools-view.targets && viewItem == cdpTarget"
+				},
+				{
+					"command": "vscode-edge-devtools-view.launch",
+					"when": "view == vscode-edge-devtools-view.targets"
+				},
+				{
+					"command": "vscode-edge-devtools-view.refresh",
+					"when": "view == vscode-edge-devtools-view.targets"
+				},
+				{
+					"command": "vscode-edge-devtools-view.copyItem",
+					"when": "view == vscode-edge-devtools-view.targets && viewItem == cdpTargetProperty"
+				},
+				{
+					"command": "vscode-edge-devtools-view.openSettings",
+					"when": "view == vscode-edge-devtools-view.targets"
+				},
+				{
+					"command": "vscode-edge-devtools-view.viewChangelog",
+					"when": "view == vscode-edge-devtools-view.targets"
+				}
+			],
+			"view/title": [
+				{
+					"command": "vscode-edge-devtools-view.launch",
+					"when": "view == vscode-edge-devtools-view.targets",
+					"group": "navigation"
+				},
+				{
+					"command": "vscode-edge-devtools-view.refresh",
+					"when": "view == vscode-edge-devtools-view.targets",
+					"group": "navigation"
+				},
+				{
+					"command": "vscode-edge-devtools-view.openSettings",
+					"when": "view == vscode-edge-devtools-view.targets",
+					"group": "2_vscode-edge-devtools"
+				},
+				{
+					"command": "vscode-edge-devtools-view.viewChangelog",
+					"when": "view == vscode-edge-devtools-view.targets",
+					"group": "2_vscode-edge-devtools"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "vscode-edge-devtools-view.toggleScreencast",
+					"when": "view == vscode-edge-devtools-view.targets && viewItem == cdpTarget",
+					"group": "inline@0"
+				},
+				{
+					"command": "vscode-edge-devtools-view.attach",
+					"when": "view == vscode-edge-devtools-view.targets && viewItem == cdpTarget || viewItem == cdpTargetClosing",
+					"group": "inline@1"
+				},
+				{
+					"command": "vscode-edge-devtools-view.close-instance",
+					"when": "view == vscode-edge-devtools-view.targets && viewItem == cdpTarget || viewItem == cdpTargetClosing",
+					"group": "inline@2"
+				},
+				{
+					"command": "vscode-edge-devtools-view.attach",
+					"when": "view == vscode-edge-devtools-view.targets && viewItem == cdpTarget"
+				},
+				{
+					"command": "vscode-edge-devtools-view.copyItem",
+					"when": "view == vscode-edge-devtools-view.targets && viewItem == cdpTargetProperty",
+					"group": "2_contextMenu"
+				}
+			],
+			"explorer/context": [
+				{
+					"when": "resourceLangId == html",
+					"submenu": "devtoolsContextMenu",
+					"group": "navigation"
+				}
+			],
+			"devtoolsContextMenu": [
+				{
+					"command": "vscode-edge-devtools-view.launchHtml",
+					"group": "navigation"
+				},
+				{
+					"command": "vscode-edge-devtools-view.launchScreencast",
+					"group": "navigation"
+				}
+			]
+		},
+		"submenus": [
+			{
+				"id": "devtoolsContextMenu",
+				"label": "Открыть в Edge"
+			}
+		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "vscode-edge-devtools-view",
+					"title": "Microsoft Edge Tools",
+					"icon": "resources/viewIcon.svg"
+				}
+			]
+		},
+		"views": {
+			"vscode-edge-devtools-view": [
+				{
+					"id": "vscode-edge-devtools-view.targets",
+					"name": "Инструменты"
+				},
+				{
+					"id": "vscode-edge-devtools-view.help-links",
+					"name": "Полезные ссылки"
+				}
+			]
+		},
+		"viewsWelcome": [
+			{
+				"view": "vscode-edge-devtools-view.targets",
+				"contents": "Запустите экземпляр Microsoft Edge, чтобы начать проверку и изменение веб-страниц.\n[Запуск экземпляра](command:vscode-edge-devtools-view.launch?[true])",
+				"when": "launchJsonStatus != Supported"
+			},
+			{
+				"view": "vscode-edge-devtools-view.targets",
+				"contents": "Чтобы настроить свой запуск, откройте папку и создайте файл launch.json. \n[Открыть папку](command:vscode.openFolder)",
+				"when": "workbenchState == empty"
+			},
+			{
+				"view": "vscode-edge-devtools-view.targets",
+				"contents": "Настройте свой процесс запуска, добавив файл launch.json в свой проект.\n[Сгенерируйте launch.json](command:vscode-edge-devtools-view.configureLaunchJson)",
+				"when": "workbenchState != empty && launchJsonStatus == None && isWorkspaceTrusted"
+			},
+			{
+				"view": "vscode-edge-devtools-view.targets",
+				"contents": "Настройте свой процесс запуска, добавив конфигурацию отладки в свой файл launch.json.\n[Configure launch.json](command:vscode-edge-devtools-view.configureLaunchJson)",
+				"when": "launchJsonStatus == Unsupported && isWorkspaceTrusted"
+			},
+			{
+				"view": "vscode-edge-devtools-view.targets",
+				"contents": "Запустите экземпляр Microsoft Edge, чтобы начать проверку и изменение вашего сайта.\n[Launch Project](command:vscode-edge-devtools-view.launchProject)",
+				"when": "launchJsonStatus == Supported && isWorkspaceTrusted"
+			},
+			{
+				"view": "vscode-edge-devtools-view.help-links",
+				"contents": "[Документация](command:vscode-edge-devtools-view.viewDocumentation)"
+			},
+			{
+				"view": "vscode-edge-devtools-view.help-links",
+				"contents": "[Сообщить об ошибке](https://github.com/microsoft/vscode-edge-devtools/issues/new?template=bug_report.md)"
+			},
+			{
+				"view": "vscode-edge-devtools-view.help-links",
+				"contents": "[Запросить функцию](https://github.com/microsoft/vscode-edge-devtools/issues/new?template=feature_request.md)"
+			}
+		]
+	},
+	"jest": {
+		"transform": {
+			"^.+\\.tsx?$": "ts-jest"
+		},
+		"testRegex": "/test/.+\\.test\\.tsx?$",
+		"moduleFileExtensions": [
+			"ts",
+			"tsx",
+			"js",
+			"jsx",
+			"json",
+			"node"
+		],
+		"globals": {
+			"DEBUG": false,
+			"DEVTOOLS_BASE_URI": "https://test.invalid"
+		}
+	},
+	"scripts": {
+		"package": "vsce package --out vscode-edge-devtools.vsix",
+		"vscode:prepublish": "npm run build && npm run lint",
+		"build": "webpack",
+		"build-debug": "npm run build debug",
+		"build-edge-watch": "webpack --env debug --env devtoolsBaseUri=http://localhost:3000/vscode_app.html",
+		"build-watch": "npm run build && npm run watch",
+		"build-and-lint": "npm run build && npm run lint",
+		"watch": "npm run watch-wp",
+		"watch-wp": "webpack --watch",
+		"lint": "eslint -c .eslintrc.js */*.ts",
+		"test": "npm run lint && jest --config package.json --runInBand --env=jsdom"
+	},
+	"dependencies": {
+		"@vscode/codicons": "0.0.22",
+		"bufferutil": "4.0.4",
+		"lit-html": "^2.2.2",
+		"puppeteer-core": "13.1.2",
+		"utf-8-validate": "5.0.6",
+		"vscode-chrome-debug-core": "6.8.11",
+		"vscode-extension-telemetry": "0.4.1",
+		"vscode-webhint": "2.1.3",
+		"ws": "8.2.2",
+		"xmlhttprequest": "1.8.0"
+	},
+	"devDependencies": {
+		"@opentelemetry/tracing": "0.24.0",
+		"@types/copy-webpack-plugin": "8.0.1",
+		"@types/fs-extra": "9.0.13",
+		"@types/jest": "27.0.2",
+		"@types/node": "16.10.1",
+		"@types/puppeteer-core": "5.4.0",
+		"@types/vscode": "1.48.0",
+		"@types/ws": "8.2.0",
+		"@typescript-eslint/eslint-plugin": "4.32.0",
+		"@typescript-eslint/parser": "4.32.0",
+		"copy-webpack-plugin": "9.0.1",
+		"eslint": "7.32.0",
+		"eslint-plugin-import": "2.24.2",
+		"eslint-plugin-jsdoc": "36.1.0",
+		"eslint-plugin-prefer-arrow": "1.2.3",
+		"fs-extra": "10.0.0",
+		"jest": "27.2.2",
+		"ts-jest": "27.0.5",
+		"ts-loader": "9.2.6",
+		"ts-node": "10.2.1",
+		"typescript": "4.4.3",
+		"uglify-js": "3.14.2",
+		"unzipper": "0.10.11",
+		"vsce": "2.6.4",
+		"vscode-languageclient": "7.0.0",
+		"vscode-test": "1.6.1",
+		"webpack": "5.54.0",
+		"webpack-cli": "4.8.0"
+	},
+	"__metadata": {
+		"id": "11cb120c-f665-45bc-a21e-6de8a5685850",
+		"publisherId": "27cecede-ad96-4e59-b8c9-38a0cfa8866b",
+		"publisherDisplayName": "Microsoft",
+		"targetPlatform": "undefined",
+		"isApplicationScoped": false,
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"installedTimestamp": 1668326205667,
+		"preRelease": false
+	}
+}
