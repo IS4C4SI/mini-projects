@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Edge DevTools for Visual Studio Code</title>
+    <style>
+        @media (prefers-color-scheme: light), (prefers-color-scheme: no-preference) {
+            :root {
+            --bg: #fff;
+            --col: #111;
+            --heading: #2ec2e0;
+            --subheading: #0d86d9;
+            --links: #0d86d9;
+            }
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+            --bg: #111;
+            --col: #fff;
+            --heading: #c8f7d1;
+            --subheading: #33c1ea;
+            --links: #33c1ea;
+            }
+        }
+        body {
+            background: var(--bg);
+            color: var(--col);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 34em;
+            margin: 0 auto;
+            font-size: calc(.7em + 1vw);
+            padding: 1em;
+        }
+        h1 {
+            min-height: 2.3em;
+            background: url('../icon.png');
+            background-size: 2.3em;
+            background-repeat: no-repeat;
+            background-position: left center;
+            padding-left: 3em;
+            font-weight: normal;
+            max-width: 15em;
+            color: var(--heading);
+            font-size: 1.9em;
+        }
+        h2 {
+            color: var(--subheading);
+            font-weight: normal;
+            margin-bottom: .5em;
+        }
+        p {
+            margin: 0 0 .5em 0;
+            padding:0;
+        }
+        a {
+            color: var(--links);
+        }
+        #headless:empty {
+            display: none;
+        }
+        #headless {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Microsoft Edge DevTools для Visual Studio Code</h1>
+    </header>
+    <section>
+        <h2>Успех!</h2>
+        <p>Вы успешно запустили html страницу в редакторе кода Visual Studio с помощью Microsoft Edge.</p>
+        <p>Теперь вы можете использовать <a href="https://docs.microsoft.com/microsoft-edge/devtools-guide-chromium">Инструменты разработчика Edge</a> внутри вашего редактора для проверки, изменения и отладки любого веб-проекта.</p>
+        <p>Используйте строку URL выше, чтобы перейти к вашему проекту или начать изменять стили этого документа.</p>
+        <!-- <p id="headless"></p> -->
+        <p>Если у вас есть какие-либо вопросы или опасения, пожалуйста, перейдите на <a href="https://github.com/microsoft/vscode-edge-devtools/issues">GitHub репозиторий</a>, ознакомьтесь с тем, как использовать расширение, или сообщите нам о своих проблемах и идеях. Мы рады вас выслушать!</p>
+        <br>
+        <p>Русификатор для расширения Microsoft Edge создан благодаря: <a href="https://github.com/Sergey-night">Sergey night</a>, <a href="https://github.com/IS4C4SI">SIKI</a> и ещё одного человека которому чечего было делать в выходной.</p>
+        <p>Версия: 1.1 хорошего вам дня! <a style="text-align: center;" href="https://www.google.ru">Открыть Google</a></p>
+    </section>
+    <script>
+        console.info('Привет со стартовой страницы!')
+        if (!window.chrome) {
+            // document.querySelector('#headless').innerHTML = 'As you are using the browser without a window you can use the URL bar in the extension for that.'
+        }
+    </script>
+</body>
+</html>
