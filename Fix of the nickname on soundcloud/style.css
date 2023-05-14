@@ -1,0 +1,7 @@
+/* removing unnecessary buttons */
+.header__goUpsell_side_by_side_experience {display: none !important;}
+.header__proUpsell_side_by_side_experience {display: none !important;}
+
+/* The return of the nickname */
+.header__userNavUsernameButton {padding-right: 100px !important;}/* <-- edit the padding if necessary */
+.header__userNavAvatar::after {content: "YourNickname" !important; position: absolute !important; top: 3px !important; left: 30px !important;}
